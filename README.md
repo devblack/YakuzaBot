@@ -50,4 +50,4 @@ TO RUN BOT
 More improved bot?
 ----------
 
-Contact me B4$h%#0069
+Contact me.
