@@ -168,9 +168,9 @@ class irc extends Main {
 
                     irc::$ServerSocket['newBuffer'] = irc::filterBuffer(irc::$ServerSocket['buffer']);
                     if (irc::$authComplete) {
-                        if (irc::$ServerSocket['newBuffer']['OPERATION'] == "PRIVMSG" && Main::validBotCMD(irc::$ServerSocket['newBuffer']['MSG'])) {
+                        if (isset(irc::$ServerSocket['newBuffer']['MSG']) && irc::$ServerSocket['newBuffer']['OPERATION'] == "PRIVMSG" && Main::validBotCMD(irc::$ServerSocket['newBuffer']['MSG'])) {
                             irc::FindCommands(
-                                strtoupper(Main::parseCommand(irc::$ServerSocket['newBuffer']['MSG'])),
+                                Main::parseCommand(irc::$ServerSocket['newBuffer']['MSG']),
                                 irc::$ServerSocket['newBuffer']['CHANNEL'],
                                 irc::$ServerSocket['newBuffer']['NICK']
                             );

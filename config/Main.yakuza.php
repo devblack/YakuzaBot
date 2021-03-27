@@ -70,7 +70,7 @@ class Main
                 'PART'         => explode(" ", self::$LOCAL_CONFIG->YakuzaBot['channels']['part'])
             ],
             'MAIN_CHANNEL'     => self::$LOCAL_CONFIG->YakuzaBot['bot']['mainchannel'],
-            'BOT_COMMANDS'     => explode(" ", self::$LOCAL_CONFIG->YakuzaBot['bot']['commands']),
+            'BOT_COMMANDS'     => explode(" ", strtoupper(self::$LOCAL_CONFIG->YakuzaBot['bot']['commands'])),
             'BOT_DEBUG'        => self::$LOCAL_CONFIG->YakuzaBot['botdebug']
         ];
     }
@@ -79,18 +79,10 @@ class Main
     private static function logType(int $type)
     {
         switch ($type) {
-            case 1:
-                return "<-";
-                break;
-            case 2:
-                return "->";
-                break;
-            case 3:
-                return "X";
-                break;
-            default:
-                return "==";
-                break;
+            case 1: return "<-";
+            case 2: return "->";
+            case 3: return "X";
+            default: return "==";
         }
     }
 
@@ -109,22 +101,13 @@ class Main
     /** Check the type of chart was receive */
     public static function type($string)
     {
-        if (is_array($string) || is_object($string)) {
-            return count($string);
-        } else {
-            return strlen($string);
-        }
+        return is_array($string) || is_object($string) ? count($string) : strlen($string);
     }
 
     /** Check if is a valid bot command */
     public static function validBotCommands(string $command)
     {
-        foreach (self::$BOT_CONFIG['BOT_COMMANDS'] as $ActiveCommand) {
-            if ($ActiveCommand == $command) {
-                return true;
-            }
-        }
-        return false;
+        return in_array($command, self::$BOT_CONFIG['BOT_COMMANDS']) ? true : false;
     }
 
     /** Check if the operation is valid */
@@ -137,12 +120,8 @@ class Main
             case 'NICK':
             case 'MODE':
             case 'PING':
-            case 'PRIVMSG':
-                return true;
-                break;
-            default:
-                return false;
-                break;
+            case 'PRIVMSG': return true;
+            default: return false;
         }
     }
 
@@ -158,13 +137,13 @@ class Main
     /** Parse Command */
     public static function parseCommand($data)
     {
-        return strstr($data, " ", true);
+        return strtoupper(explode(' ', $data)[0]);
     }
 
     /** Check if the msg have the bot delimiter */
     public static function validBotCMD(string $msg)
     {
-        return (substr($msg, 0, 1) == self::$BOT_CONFIG['BOT_CMD']) ? TRUE: FALSE;
+        return self::$BOT_CONFIG['BOT_CMD'] == substr($msg, 0, 1) ? true : false;
     }
 
     /** Parse the irc response */
